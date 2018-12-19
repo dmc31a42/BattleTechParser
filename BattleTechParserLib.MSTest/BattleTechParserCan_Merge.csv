@@ -1,0 +1,32 @@
+KEY,fr-FR
+,
+-,
+--,- -
+---,
+----,----
+-------,--- - ---
+-----------------------------------------------,-----------------------------------------------
+!,!
+!!!overheatalert!!!,<nobr>!!! ALERTE DE SURCHAUFFE !</nobr>!!</nobr>
+!!!shutdownalert!!!,<nobr>!!! ALERTE D'ARRÊT !</nobr>!!</nobr>
+!surrender!,<nobr>! REDDITION !</nobr>
+#,
+##,##
+###,###
+#####,## ###
+######,### ###
+#######,# ### ###
+########,## ### ###
+-##########,-# ### ### ###
+########c-bills,## ### ### 씨-빌즈
+#####gjnewline,## ### 지제이\n
+#####m,## ### m
+####remaining,#### Restant
+(%100---300),(%100---300)
+(%10-30),(%10-30)
+(%eq_manufacturer%),( %EQ_Manufacturer% )
+(%eq_model%),( %EQ_Model% )
+(%mc_variantname%),( %MC_VariantName% )
+(%mc_weightclass%),( %MC_weightClass% )
+(%txt_spendlevel%),
+(%wp_manufacturer%),( %WP_Manufacturer% )

@@ -21,6 +21,15 @@
     <None Update="BattleTechParserCan_AddCSVFromFilePath.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="BattleTechParserCan_Merge.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="BattleTechParserCan_Merge_Reference.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="BattleTechParserCan_ToPOT.pot">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="BattleTechParser_IsEqualItSelf.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

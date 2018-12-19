@@ -1,0 +1,19 @@
+{
+	"Description" : {
+		"Id" : "AbilityDefCMD_ArtThumperAP",
+		"Name" : "AP STRIKE",
+		"Details" : "CALLS IN AN ARMOR-PIERCING ARTILLERY STRIKE FROM YOUR THUMPER SUPPORT UNIT.",
+		"Icon" : "uixSvgIcon_artillery"
+	},
+	"ActivationTime" : "CommandAbility",
+	"Resource" : "CommandAbility",
+	"ActivationCooldown" : 4,
+	"ActivationETA" : 5,
+	"specialRules" : "Artillery",
+	"Targeting" : "CommandTargetSinglePoint",
+	"FloatParam1" : 20.0,
+	"WeaponResource" : "Weapon_Autocannon_AC20_0-STOCK",
+    "StringParam1" : "vfxPrfPrtl_fireTerrain_smLoop",
+    "IntParam1" : 1,
+    "StringParam2" : "vfxPrfPrtl_buildingCollapseFiery_medium"
+}

@@ -1,0 +1,103 @@
+msgctxt "KEY"
+msgid "fr-FR"
+msgstr ""
+
+msgctxt "-"
+msgid ""
+msgstr ""
+
+msgctxt "--"
+msgid "- -"
+msgstr ""
+
+msgctxt "---"
+msgid ""
+msgstr ""
+
+msgctxt "----"
+msgid "----"
+msgstr ""
+
+msgctxt "-------"
+msgid "--- - ---"
+msgstr ""
+
+msgctxt "-----------------------------------------------"
+msgid "-----------------------------------------------"
+msgstr ""
+
+msgctxt "!"
+msgid "!"
+msgstr ""
+
+msgctxt "!!!overheatalert!!!"
+msgid "<nobr>!!! ALERTE DE SURCHAUFFE !</nobr>!!</nobr>"
+msgstr ""
+
+msgctxt "!!!shutdownalert!!!"
+msgid "<nobr>!!! ALERTE D'ARRÊT !</nobr>!!</nobr>"
+msgstr ""
+
+msgctxt "!surrender!"
+msgid "<nobr>! REDDITION !</nobr>"
+msgstr ""
+
+msgctxt "#"
+msgid ""
+msgstr ""
+
+msgctxt "##"
+msgid "##"
+msgstr ""
+
+msgctxt "###"
+msgid "###"
+msgstr ""
+
+msgctxt "#####"
+msgid "## ###"
+msgstr ""
+
+msgctxt "######"
+msgid "### ###"
+msgstr ""
+
+msgctxt "#######"
+msgid "# ### ###"
+msgstr ""
+
+msgctxt "########"
+msgid "## ### ###"
+msgstr ""
+
+msgctxt "-##########"
+msgid "-# ### ### ###"
+msgstr ""
+
+msgctxt "########c-bills"
+msgid "## ### ### C-Bills"
+msgstr ""
+
+msgctxt "#####gjnewline"
+msgid "## ### GJ\n"
+msgstr ""
+
+msgctxt "#####m"
+msgid "## ### m"
+msgstr ""
+
+msgctxt "####remaining"
+msgid "##,## Restant"
+msgstr ""
+
+msgctxt "####xp"
+msgid "#### EXP"
+msgstr ""
+
+msgctxt "###%"
+msgid "<nobr>##,# %</nobr>"
+msgstr ""
+
+msgctxt "###0m"
+msgid "#,##0,,M"
+msgstr ""

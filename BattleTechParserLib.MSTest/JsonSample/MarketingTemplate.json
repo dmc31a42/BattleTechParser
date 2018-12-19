@@ -1,0 +1,35 @@
+{
+    "dataParts" : [
+        {
+            "displayName" : "",
+            "useEndDate" : false,
+            "endOfLife" : "0001-01-01T08:00:00Z",
+            "useStartDate" : false,
+            "startOfLife" : "0001-01-01T08:00:00Z",
+            "manuallyDisabled" : false,
+            "localizedDisplayData" : [
+                {
+                    "language" : "English",
+                    "description" : "englishBody",
+                    "url" : "englishURL"
+                },
+                {
+                    "language" : "French",
+                    "description" : "frenchBody",
+                    "url" : "frenchURL"
+                },
+                {
+                    "language" : "Russian",
+                    "description" : "russianBody",
+                    "url" : "russianURL"
+                },
+                {
+                    "language" : "German",
+                    "description" : "germanBody",
+                    "url" : "germanURL"
+                }
+            ]
+        }
+    ],
+    "swapTime" : 0
+}

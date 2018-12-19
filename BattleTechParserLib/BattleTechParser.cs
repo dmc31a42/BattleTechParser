@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Newtonsoft.Json.Linq;
 
 namespace BattleTechParser.Lib
 {
@@ -68,25 +70,33 @@ namespace BattleTechParser.Lib
 
         public bool AddCSVFromFilePath(string CSVFilePath)
         {
+            string csvStrs = "";
             try
             {
-                string[] csvStrs = System.IO.File.ReadAllLines(CSVFilePath);
-                foreach(string csvStr in csvStrs)
-                {
-                    string[] splited = SplitLine(csvStr);
-                    if(splited != null)
-                    {
-                        keyValue.Add(splited[0], splited[1]);
-                    }
-                }
-                if(keyValue.Count != 0)
-                {
-                    return true;
-                } else
-                {
-                    return false;
-                }
+                csvStrs = System.IO.File.ReadAllText(CSVFilePath); 
             } catch (Exception)
+            {
+                return false;
+            }
+            return this.AddCSVFromString(csvStrs);
+        }
+
+        public bool AddCSVFromString(string str)
+        {
+            string[] csvStrs = str.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
+            foreach (string csvStr in csvStrs)
+            {
+                string[] splited = SplitLine(csvStr);
+                if (splited != null)
+                {
+                    keyValue[splited[0]] = Parser.GetValueFromCSVString(splited[1]);
+                }
+            }
+            if (keyValue.Count != 0)
+            {
+                return true;
+            }
+            else
             {
                 return false;
             }
@@ -95,7 +105,35 @@ namespace BattleTechParser.Lib
         public bool AddJsonFromFolderPath(string FolderPath)
         {
             
-            throw new NotImplementedException();
+            string[] fileNames = System.IO.Directory.GetFiles(FolderPath, "*.json");
+            foreach(string fileName in fileNames)
+            {
+                try
+                {
+                    string tempJsonStr = System.IO.File.ReadAllText(fileName);
+                    Dictionary<string, string> tempKeyValues = ReadKeyValuesFromJObject(JObject.Parse(tempJsonStr));
+                    foreach(KeyValuePair<string, string> tempKeyValuePair in tempKeyValues)
+                    {
+                        keyValue[tempKeyValuePair.Key] = tempKeyValuePair.Value;
+                    }
+                }
+                catch (Exception)
+                {
+
+                }
+            }
+            string[] folderNames = System.IO.Directory.GetDirectories(FolderPath);
+            foreach(string folderName in folderNames)
+            {
+                AddJsonFromFolderPath(folderName);
+            }
+            if(keyValue.Count != 0)
+            {
+                return true;
+            } else
+            {
+                return false;
+            }
         }
 
         public static string[] SplitLine(string v)
@@ -118,11 +156,171 @@ namespace BattleTechParser.Lib
             return -1415560723 + EqualityComparer<Dictionary<string, string>>.Default.GetHashCode(keyValue);
         }
 
-        public static string GetKeyFromString(string v)
+        public static string GetKeyFromJsonString(string v)
         {
-            string temp = Regex.Replace(v, @"(?:\.|,|~|@|\'|\""| |\t|\f|\r)", ""); // - 이 명확하지 않음
-            temp = Regex.Replace(temp, @"(\r\n|\n)", "newline");
-            return temp.ToLower();
+            //v = Regex.Replace(v, @"(?:\.|,|~|@|\'|\""| |\t|\f|\r)", ""); // - 이 명확하지 않음
+            v = Regex.Replace(v, ",", "^", RegexOptions.Compiled);
+            v = Regex.Replace(v, @"\.", "*", RegexOptions.Compiled);
+            v = Regex.Replace(v, @"\n", "newline", RegexOptions.Compiled);
+            v = Regex.Replace(v, @"\\n", "newline", RegexOptions.Compiled);
+            v = Regex.Replace(v, @"\s+", string.Empty, RegexOptions.Compiled);
+            v = Regex.Replace(v, @"(\[\[[\w\.\[\]]+,)", string.Empty, RegexOptions.Compiled);
+            v = Regex.Replace(v, @"\]\]", string.Empty, RegexOptions.Compiled);
+            v = Regex.Replace(v, "<.+?>", string.Empty, RegexOptions.Compiled);
+            v = Regex.Replace(v, "…", string.Empty, RegexOptions.Compiled);
+            v = Regex.Replace(v, "—", string.Empty, RegexOptions.Compiled);
+            v = Regex.Replace(v, "\"", string.Empty, RegexOptions.Compiled);
+            v = Regex.Replace(v, @"\'", string.Empty, RegexOptions.Compiled);
+            v = Regex.Replace(v, @"\\\d\d\d\\\d\d\d\\\d\d\d", string.Empty, RegexOptions.Compiled);
+            v = Regex.Replace(v, @"\\u\d\d\d\d", string.Empty, RegexOptions.Compiled);
+            v = Regex.Replace(v, @"\\", string.Empty, RegexOptions.Compiled);
+            //v = Regex.Replace(v, @"(\r\n|\n)", "newline");
+            return v.ToLower();
+        }
+
+        public static string GetValueFromCSVString(string v)
+        {
+            v = v.Replace("\u001f", ",");
+            v = v.Replace("\\r\\n", "\r\n");
+            v = v.Replace("\\n", "\n");
+            v = v.Replace("\\r", "\r");
+            v = v.Replace("\\t", "\t");
+            v = v.Replace("\\f", "\f");
+            v = Regex.Replace(v, @"(.*)\\""(.*)\\""(.*)", @"$1“$2”$3");
+            return v;
+        }
+
+        public static string GetPOTStringFromKeyValue(string v)
+        {
+            v = v.Replace("\"", "\\\"");
+            v = v.Replace("\r\n", "\\r\\n");
+            v = v.Replace("\n", "\\n");
+            v = v.Replace("\r", "\\r");
+            v = v.Replace("\t", "\\t");
+            v = v.Replace("\f", "\\f");
+            return v;
+        }
+
+        public static string GetKeyValueFromPOTString(string v)
+        {
+            v = v.Replace("\\r\\n", "\r\n");
+            v = v.Replace("\\n", "\n");
+            v = v.Replace("\\r", "\r");
+            v = v.Replace("\\t", "\t");
+            v = v.Replace("\\f", "\f");
+            v = v.Replace("\\\"", "\"");
+            return v;
+        }
+
+        public static Tuple<string, string> GetKeyValueFromJObject(JToken jObject)
+        {
+            if(jObject.Type == JTokenType.String) {
+                return new Tuple<string, string>(GetKeyFromJsonString(jObject.Value<string>()), jObject.Value<string>());
+            } else if(jObject.Type == JTokenType.Object)
+            {
+                throw new Exception(jObject.ToString() + " is not JProperty");
+            } else
+            {
+                return null;
+            }
+        }
+
+        public static Dictionary<string, string> ReadKeyValuesFromJObject(JToken jObject)
+        {
+            Dictionary<string, string> keyValues = new Dictionary<string, string>();
+            foreach (JToken jToken in jObject.Children())
+            {
+                if(jToken.HasValues)
+                {
+                    Dictionary<string, string> tempKeyValues = ReadKeyValuesFromJObject(jToken);
+                    foreach (KeyValuePair<string, string> tempKeyValurPair in tempKeyValues)
+                    {
+                        keyValues[tempKeyValurPair.Key] = tempKeyValurPair.Value;
+                    }
+                } else
+                {
+                    Tuple<string, string> tuple = GetKeyValueFromJObject(jToken);
+                    if(tuple != null)
+                    {
+                        keyValues[tuple.Item1] = tuple.Item2;
+
+                    }
+                    
+                }
+            }
+            return keyValues;
+        }
+
+        public Parser Merge(Parser battleTechParserMergeFrom)
+        {
+            Parser parser = new Parser();
+            foreach(KeyValuePair<string, string> keyValuePair in this.keyValue)
+            {
+                if(battleTechParserMergeFrom.keyValue.ContainsKey(keyValuePair.Key))
+                {
+                    parser.keyValue[keyValuePair.Key] = battleTechParserMergeFrom.keyValue[keyValuePair.Key];
+                } else
+                {
+                    parser.keyValue[keyValuePair.Key] = keyValuePair.Value;
+                }
+            }
+            return parser;
+        }
+
+        public string ToCSVFormat()
+        {
+            string str = "";
+            foreach(KeyValuePair<string, string> keyValuePair in this.keyValue)
+            {
+                str += keyValuePair.Key + "," + Parser.ToCSVStringFormat(keyValuePair.Value) + "\n";
+            }
+            return str;
+        }
+
+        public static string ToCSVStringFormat(string v)
+        {
+            v = v.Replace("\r\n", "\\r\\n");
+            v = v.Replace("\n", "\\n");
+            v = v.Replace("\r", "\\r");
+            v = v.Replace("\t", "\\t");
+            v = v.Replace("\f", "\\f");
+            v = v.Replace(",", "\u001f");
+            return v;
+        }
+
+        public string ToPotFormat()
+        {
+            string str = "";
+            foreach(KeyValuePair<string, string> keyValuePair in this.keyValue)
+            {
+                str += "msgctxt \"" + GetPOTStringFromKeyValue(keyValuePair.Key) + "\"\nmsgid \"" + GetPOTStringFromKeyValue(keyValuePair.Value) + "\"\nmsgstr \"\"\n\n";
+            }
+            return str;
+        }
+
+        public bool FromPotString(string potStr)
+        {
+            potStr = Regex.Replace(potStr, "\"(\\r\\n|\\n|\\r)\"", "");
+            MatchCollection matchCollection = Regex.Matches(potStr, "msgctxt \"(.*)\"\\nmsgid \"(.*)\"\\nmsgstr \"(.*)\"");
+            foreach(Match match in matchCollection)
+            {
+                if(match.Groups[3].Value == "")
+                {
+                    this.keyValue[GetKeyValueFromPOTString(match.Groups[1].Value)] = GetKeyValueFromPOTString(match.Groups[2].Value);
+                } else
+                {
+                    this.keyValue[GetKeyValueFromPOTString(match.Groups[1].Value)] = GetKeyValueFromPOTString(match.Groups[3].Value);
+                }
+                
+            }
+            if(this.keyValue.Count != 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

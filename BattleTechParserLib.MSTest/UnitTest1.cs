@@ -173,6 +173,9 @@ namespace BattleTechParserLib.MSTest
         {
             Assert.AreEqual("Before you jump in\u001f we wanted to let you know that BATTLETECH uses Paradox Accounts. You don't need an account to play the campaign or single-player skirmish modes. However\u001f here are three good reasons to create a Paradox Account:\\r\\n\\r\\n<indent=5%>1) <#F79B26FF>Challenge your friends.</color> You need a Paradox Account to challenge other players in 1v1 multiplayer matches.\\r\\n\\r\\n2) <#F79B26FF>It's a big universe and we are just getting started.</color> A Paradox Account will keep you up to date about new features and content as they are released.\\r\\n\\r\\n3) <#F79B26FF>Get your just rewards.</color> Are you a Kickstarter Backer or someone who pre-ordered the game on a store other than Steam? A Paradox Account is how you gain access to your special goodies. Sign in\u001f then redeem your unlock code in the Account Info window (upper right of the Main Menu).\\r\\n\\r</indent>\\nAlready have a Paradox Account from a previous Paradox game\u001f or from the Paradox forums? You can log in and take advantage of the features above right away.\\r\\n\\r\\nThank you\u001f and enjoy BATTLETECH!\\r",
                 BattleTechParser.Lib.Parser.ToCSVStringFormat("Before you jump in, we wanted to let you know that BATTLETECH uses Paradox Accounts. You don't need an account to play the campaign or single-player skirmish modes. However, here are three good reasons to create a Paradox Account:\r\n\r\n<indent=5%>1) <#F79B26FF>Challenge your friends.</color> You need a Paradox Account to challenge other players in 1v1 multiplayer matches.\r\n\r\n2) <#F79B26FF>It's a big universe and we are just getting started.</color> A Paradox Account will keep you up to date about new features and content as they are released.\r\n\r\n3) <#F79B26FF>Get your just rewards.</color> Are you a Kickstarter Backer or someone who pre-ordered the game on a store other than Steam? A Paradox Account is how you gain access to your special goodies. Sign in, then redeem your unlock code in the Account Info window (upper right of the Main Menu).\r\n\r</indent>\nAlready have a Paradox Account from a previous Paradox game, or from the Paradox forums? You can log in and take advantage of the features above right away.\r\n\r\nThank you, and enjoy BATTLETECH!\r"));
+            Assert.AreEqual("test\"\"test",
+                BattleTechParser.Lib.Parser.ToCSVStringFormat("test\"test"));
+
         }
 
         [TestMethod]
@@ -193,6 +196,18 @@ namespace BattleTechParserLib.MSTest
             BattleTechParser.Lib.Parser battleTechParser1 = new BattleTechParser.Lib.Parser();
             battleTechParser1.FromPotString(potStr);
             Assert.AreEqual(battleTechParserFull, battleTechParser1);
+        }
+
+        [TestMethod]
+        public void BattleTechParser_GetKeyValueFromSQL()
+        {
+            string sqlStr = @"'A mercantile convoy operating under a {TEAM_EMP.FactionDef.Name} charter needs to travel through {TEAM_TAR.FactionDef.Name}-controlled territory.
+
+The convoy is carrying medical supplies to combat an outbreak of ARNA, a highly contagious hemorrhagic fever endemic to {TGT_SYSTEM.name}.
+
+We need you to get the convoy to a rendezvous spot that we''ll mark on your map. It is absolutely vital that the vehicles make it to their destination in one piece! Payment will be remitted upon receipt of our medicine from the convoy.'";
+            Assert.AreEqual(new KeyValuePair<string, string>("", ""),
+                BattleTechParser.Lib.Parser.GetKeyValueFromSQLLine(sqlStr));
         }
     }
 }

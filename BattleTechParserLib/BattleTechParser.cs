@@ -284,6 +284,8 @@ namespace BattleTechParser.Lib
             v = v.Replace("\r", "\\r");
             v = v.Replace("\t", "\\t");
             v = v.Replace("\f", "\\f");
+            v = v.Replace ("\"\"", "\"");
+            v = v.Replace("\"", "\"\"");
             v = v.Replace(",", "\u001f");
             return v;
         }
@@ -304,12 +306,12 @@ namespace BattleTechParser.Lib
             MatchCollection matchCollection = Regex.Matches(potStr, "msgctxt \"(.*)\"\\nmsgid \"(.*)\"\\nmsgstr \"(.*)\"");
             foreach(Match match in matchCollection)
             {
-                if(match.Groups[3].Value == "")
+                if(match.Groups[2].Value == "")
                 {
-                    this.keyValue[GetKeyValueFromPOTString(match.Groups[1].Value)] = GetKeyValueFromPOTString(match.Groups[2].Value);
+                    this.keyValue[GetKeyValueFromPOTString(match.Groups[0].Value)] = GetKeyValueFromPOTString(match.Groups[1].Value);
                 } else
                 {
-                    this.keyValue[GetKeyValueFromPOTString(match.Groups[1].Value)] = GetKeyValueFromPOTString(match.Groups[3].Value);
+                    this.keyValue[GetKeyValueFromPOTString(match.Groups[0].Value)] = GetKeyValueFromPOTString(match.Groups[2].Value);
                 }
                 
             }
@@ -322,5 +324,80 @@ namespace BattleTechParser.Lib
                 return false;
             }
         }
+
+        public bool AddGameTipsFromFilePath(string filePath)
+        {
+            string txtStrs = "";
+            try
+            {
+                txtStrs = System.IO.File.ReadAllText(filePath);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+            return this.AddGameTipsFromString(txtStrs);
+        }
+
+        public bool AddGameTipsFromString(string str)
+        {
+            string[] txtStrs = str.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
+            foreach (string txtStr in txtStrs)
+            {
+                if(txtStr != "")
+                {
+                    keyValue[Parser.GetKeyFromJsonString(txtStr)] = txtStr;
+                }
+            }
+            if (keyValue.Count != 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool AddSQLFromString(string str)
+        {
+            MatchCollection matchCollection = Regex.Matches(str, @"'.{2,}?[^']'(?!')");
+            foreach(Match match in matchCollection)
+            {
+                KeyValuePair<string, string> keyValuePair = GetKeyValueFromSQLLine(match.Groups[0].Value);
+                keyValue[keyValuePair.Key] = keyValuePair.Value;
+            }
+            if (keyValue.Count != 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+        }
+
+        public bool AddSQLFromFilePath(string filePath)
+        {
+            string txtStrs = "";
+            try
+            {
+                txtStrs = System.IO.File.ReadAllText(filePath);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+            return this.AddSQLFromString(txtStrs);
+        }
+
+        public static KeyValuePair<string, string> GetKeyValueFromSQLLine(string v)
+        {
+            v = v.Replace("''", "'");
+            return new KeyValuePair<string, string>(GetKeyFromJsonString(v), v);
+        }
+
+
     }
 }

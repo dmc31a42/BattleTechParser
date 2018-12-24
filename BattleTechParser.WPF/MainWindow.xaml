@@ -1,0 +1,71 @@
+﻿<Window x:Class="BattleTechParser.WPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BattleTechParser.WPF"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <StackPanel Margin="5" Grid.Row="0">
+            <TextBlock Text="원본 CSV 파일 경로:"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBox Grid.Column="0" Text="{Binding Path=OriginalCSVFilePath}"/>
+                <Button Content="Select File" Grid.Column="1" x:Name="btnOriginalCSVFileSelect" Click="BtnOriginalCSVFileSelect_Click"/>
+            </Grid>
+            <TextBlock Text="TMPro.TMP_Dropdown, TMPro.TMP_InputField, TMPro.TextMeshProUGUI 등의 json 파일이 있는 폴더 경로: "/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBox Grid.Column="0" Text="{Binding Path=TMProJsonFolderPath}"/>
+                <Button Content="Select Folder" Grid.Column="1" x:Name="btnTMProJsonFolderSelect" Click="BtnTMProJsonFolderSelect_Click"/>
+            </Grid>
+            <TextBlock Text="BATTLETECH\BattleTech_Data\ 폴더 경로: "/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBox Grid.Column="0" Text="{Binding Path=BattleTech_DataFolderPath}"/>
+                <Button Content="Select Folder" Grid.Column="1" x:Name="btnBattleTech_DataFolderSelect" Click="BtnBattleTech_DataFolderSelect_Click"/>
+            </Grid>
+            <TextBlock Text="번역된 CSV 파일 경로: "/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBox Grid.Column="0" Text="{Binding Path=TranslatedCSVFilePath}"/>
+                <Button Content="Select File" Grid.Column="1" x:Name="btnTranslatedCSVFileSelect" Click="BtnTranslatedCSVFileSelect_Click"/>
+            </Grid>
+            <TextBlock Text="결과물이 저장될 폴더 경로: "/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBox Grid.Column="0" Text="{Binding Path=ResultsFolderPath}"/>
+                <Button Content="Select Folder" Grid.Column="1" x:Name="btnResultsFolderSelect" Click="BtnResultsFolderSelect_Click"/>
+            </Grid>
+        </StackPanel>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+            <ProgressBar x:Name="progressBar1" Grid.Column="0" Margin="5"/>
+            <Button Grid.Column="1" HorizontalAlignment="Right" Content="시작" Margin="5" x:Name="btnStart" Click="BtnStart_Click"/>
+        </Grid>
+        
+    </Grid>
+</Window>
